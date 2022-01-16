@@ -1,0 +1,42 @@
+package shieldio;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
+public class Player extends AllPlayers{
+
+	
+	public Player(int x, int y, int radius, String name) {
+		super(x, y, radius, name);
+		velX = 0;
+		velY = 0;
+		degree = 0;
+		triangle = new Triangle(x, y, radius, degree);
+		rectangle = new CannonShape(triangle);
+		
+	}
+	
+	public void tick() {
+		x += velX;
+		y += velY;
+		triangle = new Triangle(x, y, radius, degree);
+		rectangle = new CannonShape(triangle);
+		x = Game.clamp((int)x,  0,  Game.WIDTH);
+		y = Game.clamp((int)y,  0, Game.HEIGHT-60);
+	}
+	
+	public void render(Graphics g) {
+		Graphics2D g2d = (Graphics2D)g;
+
+		g2d.setColor(Color.GREEN);
+
+		g2d.fillPolygon(this.getTriangle().getTriangle());
+		g2d.setColor(Color.BLUE);
+		g2d.fillRect(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+
+		//g2d.setColor(Color.WHITE);
+		//g2d.drawString(name, this.getTriangle().getXList().get(0), this.getTriangle().getYList().get(1));
+	}
+	
+}

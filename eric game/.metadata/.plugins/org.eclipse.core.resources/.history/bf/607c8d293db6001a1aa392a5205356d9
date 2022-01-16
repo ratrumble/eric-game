@@ -1,0 +1,95 @@
+package shieldio;
+
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+
+public class CannonShape {
+
+	private int[] xPoints;
+	private int[] yPoints;
+	private int width;
+	private int height;
+	private Polygon rectangle;
+	private Triangle triangle;
+	
+	public CannonShape(Triangle triangle) {
+		this.triangle = triangle;
+		width = Math.abs(triangle.getRadius());
+		height = Math.abs(triangle.getRadius())/4 * 3;
+		if(triangle.getDegree() > Math.PI/2) {
+			height = -height;
+		}
+		
+		xPoints = new int[] {triangle.getXList().get(1), triangle.getXList().get(2),
+				triangle.getXList().get(2), triangle.getXList().get(1)};
+		
+		yPoints = new int[] {triangle.getYList().get(1), triangle.getYList().get(2),
+				triangle.getYList().get(2)+height, triangle.getYList().get(1)+height};
+		
+	
+		
+		rectangle = new Polygon(xPoints, yPoints, 4);
+	}
+	
+	public void updateDegree() {
+		int[] newX = new int[4];
+		int[] newY = new int[4];
+		for (int i = 0; i < xPoints.length; i ++) {
+			newX[i] = (int)(triangle.getCenterX() + (xPoints[i] - triangle.getCenterX())
+					* Math.cos(triangle.getDegree()) - (yPoints[i] - triangle.getCenterY()) * 
+					Math.sin((triangle.getDegree())));
+			newY[i] = (int)(triangle.getCenterY() + (xPoints[i] - triangle.getCenterX()) * 
+					Math.sin(triangle.getDegree())+ (yPoints[i] - triangle.getCenterY()) * 
+					Math.cos((triangle.getDegree())));
+			
+		}
+		xPoints = newX;
+		yPoints = newY;
+	}
+	
+	public Polygon getRect() {
+		return rectangle;
+	}
+	
+	public int[] getXPoints() {
+		return xPoints; 
+	}
+	
+	public ArrayList<Integer> getXList() {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		for (int i = 0; i < xPoints.length; i++) {
+			list.add(xPoints[i]);
+		}
+		return list;
+	}
+	
+	public void setXPoints(int x1, int x2, int x3) {
+		xPoints = new int[] {x1, x2, x3};
+	}
+	
+	public int[] getYPoints() {
+		return yPoints;
+	}
+	
+	public ArrayList<Integer> getYList() {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		for (int i = 0; i < yPoints.length; i++) {
+			list.add(yPoints[i]);
+		}
+		return list;
+	}
+	
+	public void setYPoints(int y1, int y2, int y3) {
+		yPoints = new int[] {y1, y2, y3};
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+}
